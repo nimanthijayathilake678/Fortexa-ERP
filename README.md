@@ -1,101 +1,58 @@
-<h1>Product Service - Clothing Shop Microservice</h1> 
-<p>The <strong>Product Service</strong> is a microservice responsible for handling all product-related operations in the clothing shop application. It is a part of the larger e-commerce system and interacts with other services such as Order Service, Payment Service, and Inventory Service. The service is built using <strong>Spring Boot</strong> and is configured to interact with <strong>MongoDB</strong> for product data storage.</p>
+# RetailHub - E-Commerce Microservices System
 
-<h2>Features</h2>
-<ul>
-     <li><strong>Product Management</strong>: Handle product CRUD (Create, Read, Update, Delete) operations.</li>
-    <li><strong>MongoDB Integration</strong>: Store product data using MongoDB.</li>
-    <li><strong>Error Handling</strong>: Utilize global exception handling with descriptive error messages.</li>
-    <li><strong>DTO Usage</strong>: Use Data Transfer Objects (DTOs) for API communication.</li>
-    <li><strong>Security</strong>: Basic security setup with JWT authentication.</li>
-    <li><strong>API Documentation</strong>: Swagger-based documentation for all exposed endpoints.</li>
-</ul>
+The **RetailHub** project is a modern, microservices-based e-commerce system designed to manage catalogues, orders, inventories, users, sellers, customers, and locations for retail businesses such as clothing shops. Built using **Java Spring Boot**, the system leverages **MongoDB** and **MySQL** for data storage and follows best practices for scalability, maintainability, and performance.
 
-<h2>Prerequisites</h2>
-<p>Before running the project, ensure you have the following software installed:</p>
-<ul>
-     <li><strong>Java 11+</strong></li>
-     <li><strong>Maven</strong> or <strong>Gradle</strong></li>
-     <li><strong>MongoDB</strong> (local or cloud instance)</li>
-</ul>
+---
 
-<h2>Project Structure</h2>
-<pre>
-       will be updated.
-</pre>
+## Features
 
-<h2>Getting Started</h2>
-<h3>1. Clone the Repository</h3>
-<pre>
-     git clone https://github.com/yourusername/product-service.git
-     cd product-service
-</pre>
+### Core Services
+1. **Catalogue Service**  
+   - Manage products, categories, and materials (e.g., T-shirts, sizes, colors).  
+   - Flexible schema for dynamic product attributes.  
+2. **Order Service**  
+   - Handle customer and internal orders.  
+   - Support for order tracking, payments, and fulfillment.  
+3. **Inventory Service**  
+   - Real-time stock tracking with barcode/item-level granularity.  
+   - Batch management for tracking bulk purchases from sellers.  
+4. **User Service**  
+   - Role-based access control (e.g., owner, accountant, cashier).  
+   - Authentication and authorization using JWT.  
+5. **Seller Service**  
+   - Manage seller information and bulk purchase agreements.  
+6. **Customer Service**  
+   - Manage customer profiles, loyalty programs, and order history.  
+7. **Location Service**  
+   - Track warehouses, shops, and storage zones.  
+8. **Notification Service**  
+   - Send email/SMS alerts for orders, low stock, and system events.  
 
-<h3>2. Configure MongoDB</h3>
-<p>Make sure you have MongoDB running locally or use a cloud-based service like <strong>MongoDB Atlas</strong>. If you're running it locally, you can configure it in the <code>application.properties</code> file:</p>
-<pre>
-     spring.data.mongodb.uri=mongodb://localhost:27017/clothing-shop
-</pre>
-<p>For MongoDB Atlas, use the connection string provided by Atlas.</p>
+---
 
-<h3>3. Run the Service</h3>
-<p>To run the service locally, execute the following Maven command:</p>
-<pre>
-     mvn spring-boot:run
-</pre>
-<p>The service will be running on <code>http://localhost:8080</code> by default.</p>
+## Technologies Used
+- **Spring Boot**: Backend framework for building microservices.  
+- **MongoDB**: NoSQL database for flexible data storage (Catalogue, Inventory, Notification services).  
+- **MySQL**: Relational database for structured data (Order, User, Seller, Customer, Location services).  
+- **Kafka/RabbitMQ**: Message broker for event-driven communication.  
+- **Swagger**: API documentation.  
+- **JWT**: Security and authentication.  
+- **Docker & Kubernetes**: Containerization and orchestration.  
 
-<h3>4. API Documentation</h3>
-<p>Once the service is running, you can view the API documentation via <strong>Swagger UI</strong> at:</p>
-<pre>
-     http://localhost:8080/swagger-ui.html
-</pre>
+---
 
-<h3>5. Endpoints</h3>
-<p>Here are some of the key API endpoints:</p>
-<ul>
-     <li><strong>GET</strong> <code>/api/products</code>: Retrieve all products.</li>
-     <li><strong>GET</strong> <code>/api/products/{id}</code>: Retrieve a single product by ID.</li>
-     <li><strong>POST</strong> <code>/api/products</code>: Create a new product.</li>
-     <li><strong>PUT</strong> <code>/api/products/{id}</code>: Update an existing product.</li>
-     <li><strong>DELETE</strong> <code>/api/products/{id}</code>: Delete a product by ID.</li>
-</ul>
+## Prerequisites
+- **Java 17+**  
+- **Maven 3.9+** or **Gradle 8.4+**  
+- **MongoDB 6.0+** (local or Atlas)  
+- **MySQL 8.0+**  
+- **Docker** (optional for containerization)  
 
-<h3>6. Error Handling</h3>
-<p>The service uses a global exception handler to manage errors consistently. If an error occurs (e.g., a product is not found), the response will return an error code and a descriptive message.</p>
-<pre>
-     {
-     "error": "Product with ID 123 not found."
-     }
-</pre>
+---
 
-<h3>7. Security</h3>
-<p>The service is configured with basic JWT authentication. You'll need to implement authentication endpoints and token management if needed for production use.</p>
+## Getting Started
 
-<h2>Technologies Used</h2>
-<ul>
-     <li><strong>Spring Boot</strong>: For building the microservice.</li>
-     <li><strong>MongoDB</strong>: NoSQL database for storing product data.</li>
-     <li><strong>Swagger</strong>: For generating API documentation.</li>
-     <li><strong>DTO (Data Transfer Object)</strong>: For managing API responses and requests.</li>
-     <li><strong>Exception Handling</strong>: Custom global exception handler for consistent error messages.</li>
- </ul>
-
-<h2>Contributing</h2>
-<ol>
-     <li>Fork the repository.</li>
-     <li>Create a new branch (<code>git checkout -b feature/your-feature</code>).</li>
-     <li>Commit your changes (<code>git commit -am 'Add new feature'</code>).</li>
-     <li>Push to the branch (<code>git push origin feature/your-feature</code>).</li>
-     <li>Open a Pull Request.</li>
-</ol>
-
-<h2>License</h2>
-<p>This project is licensed under the MIT License - see the <a href="LICENSE">LICENSE</a> file for details.</p>
-
-<h2>Acknowledgments</h2>
-<ul>
-     <li><strong>Spring Boot</strong> for the framework.</li>
-     <li><strong>MongoDB</strong> for the database solution.</li>
-     <li><strong>Swagger</strong> for easy API documentation.</li>
-</ul>
+### 1. Clone the Repository
+```bash
+git clone https://github.com/yourusername/retailhub.git
+cd retailhub
