@@ -1,0 +1,13 @@
+# Ignore target directory
+target
+
+# Maven local repository
+.mvn
+
+# Logs and temporary files
+*.log
+*.tmp
+
+# IntelliJ IDEA files
+.idea
+*.iml

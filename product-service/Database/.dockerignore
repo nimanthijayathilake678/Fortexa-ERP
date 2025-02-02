@@ -1,0 +1,6 @@
+# Ignore data volume
+mongo-data
+
+# Logs and configuration
+*.log
+*.bak
