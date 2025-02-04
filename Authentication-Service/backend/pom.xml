@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+ <parent>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-parent</artifactId>
+  <version>3.4.2</version>
+  <relativePath/> <!-- lookup parent from repository -->
+ </parent>
+ <groupId>com.shop.microservices</groupId>
+ <artifactId>Authentication-Service</artifactId>
+ <version>0.0.1-SNAPSHOT</version>
+ <name>Authentication-Service</name>
+ <description>Authentication-Service for ERP System</description>
+ <url/>
+ <licenses>
+  <license/>
+ </licenses>
+ <developers>
+  <developer/>
+ </developers>
+ <scm>
+  <connection/>
+  <developerConnection/>
+  <tag/>
+  <url/>
+ </scm>
+ <properties>
+  <java.version>21</java.version>
+ </properties>
+ <dependencies>
+
+  <!-- Spring Boot Starter Web -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-web</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- Spring Boot Starter Security -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-security</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- Spring Boot OAuth2 Resource Server (JWT Support) -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- Spring Boot Starter Data JPA -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-data-jpa</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- Spring Boot Starter Cache -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-cache</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- Spring Boot Starter Data Redis -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-data-redis</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- Keycloak Spring Boot Adapter -->
+  <dependency>
+   <groupId>org.keycloak</groupId>
+   <artifactId>keycloak-spring-boot-starter</artifactId>
+   <version>22.0.2</version>
+  </dependency>
+
+  <!-- Spring Boot OAuth2 Client (For Google OAuth2 Login) -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-oauth2-client</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- Spring Boot Starter Validation (for input validation) -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-validation</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- Spring Boot Starter Thymeleaf (for email templates in 2FA) -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-thymeleaf</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- Lombok (for reducing boilerplate code) -->
+  <dependency>
+   <groupId>org.projectlombok</groupId>
+   <artifactId>lombok</artifactId>
+   <version>1.18.30</version>
+   <scope>provided</scope>
+  </dependency>
+
+  <!-- Spring Boot Starter Mail (for 2FA email verification) -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-mail</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- Spring Boot Starter Scheduler (for scheduled cache refresh) -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter</artifactId>
+   <version>3.4.2</version>
+  </dependency>
+
+  <!-- MySQl Driver (for database connection) -->
+  <dependency>
+   <groupId>com.mysql</groupId>
+   <artifactId>mysql-connector-j</artifactId>
+   <scope>runtime</scope>
+  </dependency>
+
+  <!-- Spring Boot Starter Test (for unit and integration testing) -->
+  <dependency>
+   <groupId>org.springframework.boot</groupId>
+   <artifactId>spring-boot-starter-test</artifactId>
+   <version>3.4.2</version>
+   <scope>test</scope>
+  </dependency>
+
+ </dependencies>
+
+ <build>
+  <plugins>
+   <plugin>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-maven-plugin</artifactId>
+    <version>3.4.2</version>
+   </plugin>
+  </plugins>
+ </build>
+
+</project>
