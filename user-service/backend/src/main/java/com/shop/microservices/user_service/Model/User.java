@@ -1,7 +1,10 @@
 package com.shop.microservices.user_service.Model;
 
+import com.shop.microservices.user_service.Configuration.ValidPassword;
 import com.shop.microservices.user_service.Enumeration.UserStatusEnum;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Set;
@@ -46,6 +49,8 @@ public class User extends Auditable {
      * The password for the user.
      * This field is required.
      */
+    @Size(min = 8, max = 32, message = "Password must be between 8 and 32 characters")
+    @ValidPassword
     @Column(nullable = false)
     private String password;
 
@@ -53,6 +58,7 @@ public class User extends Auditable {
      * The email address associated with the user.
      * This field is unique and required.
      */
+    @Email
     @Column(unique = true, nullable = false)
     private String email;
 
