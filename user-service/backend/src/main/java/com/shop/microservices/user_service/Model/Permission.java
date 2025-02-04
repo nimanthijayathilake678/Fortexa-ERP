@@ -1,77 +1,57 @@
 package com.shop.microservices.user_service.Model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
+import lombok.*;
 
-import java.time.Instant;
 import java.util.Set;
 
 /**
- * Represents a permission entity in the system. A permission defines a specific
- * action that a user or a role can perform. This entity tracks creation and
- * modification details using auditing annotations.
+ * Represents a permission entity in the system.
+ * A permission defines a specific action that a user or role can perform within the application.
+ * This class extends {@link Auditable} to inherit creation and modification tracking features.
+ *
+ * The entity is used to manage roles and permissions, and ensures each permission is unique
+ * within the system. Auditing annotations automatically handle the population of created/modified
+ * metadata.
+ *
+ * <p>
+ * A {@link Permission} can be associated with multiple {@link Role}s, facilitating the management
+ * of user capabilities through role-based access control.
+ * </p>
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Permission {
+public class Permission extends Auditable {
 
     /**
-     * Unique identifier for the permission.
+     * Unique identifier for the permission. Generated using UUID strategy.
      */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     /**
-     * The permission name or code, which must be unique.
+     * The permission name or code. This field must be unique across the system.
+     * It represents a specific action that can be assigned to roles or users.
      */
     @Column(unique = true, nullable = false)
     private String permission;
 
     /**
-     * A description providing more details about the permission.
+     * A detailed description of the permission. This can provide further context
+     * for understanding the specific use case of the permission.
      */
     private String description;
 
     /**
-     * Roles associated with this permission.
+     * The set of {@link Role}s that are associated with this permission.
+     * A permission can be linked to multiple roles, granting users in those roles
+     * the associated permission.
      */
     @ManyToMany(mappedBy = "permissions")
     private Set<Role> roles;
-
-    /**
-     * The username of the person who created this permission.
-     */
-    @CreatedBy
-    @Column(updatable = false)
-    private String createdBy;
-
-    /**
-     * The timestamp when this permission was created.
-     */
-    @CreatedDate
-    @Column(updatable = false)
-    private Instant createdDate;
-
-    /**
-     * The username of the person who last modified this permission.
-     */
-    @LastModifiedBy
-    private String lastModifiedBy;
-
-    /**
-     * The timestamp when this permission was last modified.
-     */
-    @LastModifiedDate
-    private Instant lastModifiedDate;
 }
