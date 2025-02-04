@@ -19,6 +19,7 @@ import java.util.Set;
  * @see PersonalInfo     The {@link PersonalInfo} class containing the user's personal details.
  * @see Role             The {@link Role} class defining a set of permissions granted to the user.
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Data
 @NoArgsConstructor

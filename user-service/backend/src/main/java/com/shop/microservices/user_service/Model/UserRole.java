@@ -17,10 +17,10 @@ import lombok.*;
  * @see Role        The {@link Role} class, which defines the permissions granted to users with that role.
  * @see Auditable   The {@link Auditable} class, which tracks audit information like createdBy, createdDate.
  */
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "user_roles")
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
