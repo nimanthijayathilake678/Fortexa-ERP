@@ -2,44 +2,50 @@ package com.shop.microservices.user_service.Model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedBy;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedBy;
-import org.springframework.data.annotation.LastModifiedDate;
 
-import java.time.Instant;
-
+/**
+ * Represents the association between roles and permissions in the system.
+ * This entity maps to the 'role_permissions' table and links a specific role to a specific permission.
+ * It also includes auditing information inherited from the {@link Auditable} class.
+ *
+ * @see Role       The {@link Role} entity representing user roles in the system.
+ * @see Permission The {@link Permission} entity representing the actions a user can perform.
+ * @see Auditable  The {@link Auditable} class providing audit information.
+ */
 @Entity
 @Table(name = "role_permissions")
-@Getter
-@Setter
+@EqualsAndHashCode(callSuper = true)
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RolePermission {
+public class RolePermission extends Auditable {
+
+    /**
+     * Unique identifier for the role-permission association.
+     * Generated using UUID strategy.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
+    /**
+     * The role associated with this permission.
+     * This represents the role to which the permission is granted.
+     *
+     * @see Role The {@link Role} entity.
+     */
     @ManyToOne
     @JoinColumn(name = "role_id", referencedColumnName = "id")
     private Role role;
 
+    /**
+     * The permission associated with this role.
+     * This represents the specific permission granted to the role.
+     *
+     * @see Permission The {@link Permission} entity.
+     */
     @ManyToOne
     @JoinColumn(name = "permission_id", referencedColumnName = "id")
     private Permission permission;
-
-    @CreatedBy
-    @Column(updatable = false)
-    private String createdBy;
-
-    @CreatedDate
-    @Column(updatable = false)
-    private Instant createdDate;
-
-    @LastModifiedBy
-    private String lastModifiedBy;
-
-    @LastModifiedDate
-    private Instant lastModifiedDate;
 }
