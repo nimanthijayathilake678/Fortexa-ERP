@@ -1,6 +1,6 @@
 package com.shop.microservices.user_service.Exception;
 
-import com.shop.microservices.product.Utils.ErrorMessageUtil;
+import com.shop.microservices.user_service.Utils.ErrorMessageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
