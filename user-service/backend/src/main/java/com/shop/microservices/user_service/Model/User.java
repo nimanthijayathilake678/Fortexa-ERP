@@ -1,10 +1,8 @@
 package com.shop.microservices.user_service.Model;
 
-import com.shop.microservices.user_service.Configuration.ValidPassword;
 import com.shop.microservices.user_service.Enumeration.UserStatusEnum;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.util.Set;
@@ -19,8 +17,8 @@ import java.util.Set;
  *
  * @see Auditable         The {@link Auditable} class, which tracks audit information (e.g., createdBy, createdDate).
  * @see UserStatusEnum    The {@link UserStatusEnum} enum defining possible user statuses (ACTIVE, INACTIVE).
- * @see PersonalInfo     The {@link PersonalInfo} class containing the user's personal details.
- * @see Role             The {@link Role} class defining a set of permissions granted to the user.
+ * @see PersonalInfo      The {@link PersonalInfo} class containing the user's personal details.
+ * @see Role              The {@link Role} class defining a set of permissions granted to the user.
  */
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -49,8 +47,6 @@ public class User extends Auditable {
      * The password for the user.
      * This field is required.
      */
-    @Size(min = 8, max = 32, message = "Password must be between 8 and 32 characters")
-    @ValidPassword
     @Column(nullable = false)
     private String password;
 
