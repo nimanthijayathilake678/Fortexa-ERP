@@ -1,6 +1,6 @@
-# RetailHub - E-Commerce Microservices System
+# Fortexa - ERP System
 
-The **RetailHub** project is a modern, microservices-based e-commerce system designed to manage catalogues, orders, inventories, users, sellers, customers, and locations for retail businesses such as clothing shops. Built using **Java Spring Boot**, the system leverages **MongoDB** and **MySQL** for data storage and follows best practices for scalability, maintainability, and performance.
+The **Fortexa** project is a modern, microservices-based e-commerce system designed to manage catalogues, orders, inventories, users, sellers, customers, and locations for retail businesses such as clothing shops. Built using **Java Spring Boot**, the system leverages **MongoDB** and **MySQL** for data storage and follows best practices for scalability, maintainability, and performance.
 
 ---
 
