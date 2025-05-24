@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  api-gateway:
+    build:
+      context: .
+    ports:
+      - "8080:8080"
+    env_file: .env # Loads variables from .env file first
+    environment:
+      # Override .env variables for Docker Compose internal networking
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/your-realm 
+      REDIS_HOST: redis
+      # REDIS_PORT will be taken from .env or default to 6379, which is fine
+    depends_on:
+      keycloak:
+        condition: service_healthy # Wait for keycloak to be healthy
+      redis:
+        condition: service_healthy  # Wait for redis to be healthy
+    networks:
+      - fortexa-net
+    # Docker Compose will use the healthcheck from the Dockerfile if service_healthy is used.
+    # Alternatively, you can define a specific healthcheck here too.
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0
+    ports:
+      - "8180:8080" # Keycloak admin console on host port 8180
+    environment:
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: true
+      KC_METRICS_ENABLED: true
+    command: start-dev 
+    networks:
+      - fortexa-net
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 30s # Give Keycloak time to start up
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - fortexa-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+networks:
+  fortexa-net:
+    driver: bridge
