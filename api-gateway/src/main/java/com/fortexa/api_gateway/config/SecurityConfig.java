@@ -21,11 +21,7 @@ import org.springframework.web.cors.reactive.CorsWebFilter;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import reactor.core.publisher.Mono;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList; // Added for authorities list
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -52,14 +48,15 @@ public class SecurityConfig {
     private static final String PRIMARY_ROLE_CLAIM = "primary_role";
 
     // Converter to extract authorities from JWT, focusing on 'primary_role'
-    private Converter<Jwt, Mono<AbstractAuthenticationToken>> customJwtAuthenticationConverter() {
+    // Changed from private to package-private (default) to allow access from test class
+    Converter<Jwt, Mono<AbstractAuthenticationToken>> customJwtAuthenticationConverter() {
         // This standard converter handles "scope" or "scp" claims.
         JwtGrantedAuthoritiesConverter defaultGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
 
         return jwt -> {
             // Get default authorities (e.g., from 'scope' claim)
             Collection<GrantedAuthority> defaultAuthorities = defaultGrantedAuthoritiesConverter.convert(jwt);
-            if (defaultAuthorities == null) {
+            if (defaultAuthorities.isEmpty()) {
                 defaultAuthorities = new ArrayList<>(); // Initialize if null
             } else {
                 defaultAuthorities = new ArrayList<>(defaultAuthorities); // Make mutable to add more
@@ -75,7 +72,7 @@ public class SecurityConfig {
             }
 
             // Use a Set to combine and avoid duplicates if any
-            Collection<GrantedAuthority> finalAuthorities = defaultAuthorities.stream().collect(Collectors.toSet());
+            Collection<GrantedAuthority> finalAuthorities = new HashSet<>(defaultAuthorities);
 
             // Last argument to JwtAuthenticationToken is the principal name. Using jwt.getSubject() is common.
             return Mono.just(new JwtAuthenticationToken(jwt, finalAuthorities, jwt.getSubject()));
