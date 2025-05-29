@@ -5,9 +5,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.Customizer;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.oauth2.jwt.Jwt;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsWebFilter;
@@ -15,14 +22,18 @@ import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.ArrayList; // Added for authorities list
+import java.util.stream.Collectors;
+
 
 /**
  * Security configuration for the API Gateway.
  *
- * This class configures security settings, including CORS, CSRF, and OAuth2 resource server.
- * It also defines a global filter for request and response processing.
+ * This class configures security settings, including CORS, CSRF, OAuth2 resource server,
+ * and role-based authorization based on a 'primary_role' JWT claim.
  */
 @Configuration
 @EnableWebFluxSecurity
@@ -34,8 +45,42 @@ public class SecurityConfig {
             "/api/auth/signup",
             "/api/auth/login",
             "/api/auth/refresh-token",
-            "/actuator/health/**"
+            "/actuator/**"
     };
+
+    // Claim name for the primary role in the JWT
+    private static final String PRIMARY_ROLE_CLAIM = "primary_role";
+
+    // Converter to extract authorities from JWT, focusing on 'primary_role'
+    private Converter<Jwt, Mono<AbstractAuthenticationToken>> customJwtAuthenticationConverter() {
+        // This standard converter handles "scope" or "scp" claims.
+        JwtGrantedAuthoritiesConverter defaultGrantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+
+        return jwt -> {
+            // Get default authorities (e.g., from 'scope' claim)
+            Collection<GrantedAuthority> defaultAuthorities = defaultGrantedAuthoritiesConverter.convert(jwt);
+            if (defaultAuthorities == null) {
+                defaultAuthorities = new ArrayList<>(); // Initialize if null
+            } else {
+                defaultAuthorities = new ArrayList<>(defaultAuthorities); // Make mutable to add more
+            }
+
+            String primaryRole = jwt.getClaimAsString(PRIMARY_ROLE_CLAIM);
+            if (primaryRole != null && !primaryRole.trim().isEmpty()) {
+                // Add the primary role, prefixed with "ROLE_"
+                defaultAuthorities.add(new SimpleGrantedAuthority("ROLE_" + primaryRole.toUpperCase()));
+                logger.debug("Extracted primary role: ROLE_{}", primaryRole.toUpperCase());
+            } else {
+                logger.debug("No '{}' claim found in JWT or it's empty.", PRIMARY_ROLE_CLAIM);
+            }
+
+            // Use a Set to combine and avoid duplicates if any
+            Collection<GrantedAuthority> finalAuthorities = defaultAuthorities.stream().collect(Collectors.toSet());
+
+            // Last argument to JwtAuthenticationToken is the principal name. Using jwt.getSubject() is common.
+            return Mono.just(new JwtAuthenticationToken(jwt, finalAuthorities, jwt.getSubject()));
+        };
+    }
 
     /**
      * Configures the security filter chain for the API Gateway.
@@ -48,21 +93,28 @@ public class SecurityConfig {
         http
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers(PUBLIC_URLS).permitAll()
+                        // Sample role-based authorization rules:
+                        .pathMatchers("/api/admin-console/**").hasRole("ADMIN")
+                        .pathMatchers("/api/management/reports/**").hasAnyRole("MANAGER", "OWNER")
+                        .pathMatchers(HttpMethod.GET, "/api/products/**").hasRole("USER")
+                        .pathMatchers(HttpMethod.POST, "/api/products/**").hasRole("USER")
+                        .pathMatchers(HttpMethod.PUT, "/api/products/**").hasRole("USER")
+                        .pathMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("USER")
+                        .pathMatchers("/api/v1/users/**").hasRole("USER")
                         .anyExchange().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
-                        .jwt(Customizer.withDefaults())
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(customJwtAuthenticationConverter()))
                 );
 
         http.csrf(ServerHttpSecurity.CsrfSpec::disable);
 
-        logger.info("Security filter chain configured successfully.");
+        logger.info("Security filter chain configured with custom JWT converter for 'primary_role' and role-based authorization.");
         return http.build();
     }
 
     /**
      * Configures CORS settings for the API Gateway.
-     *
      * @return the {@link CorsWebFilter} instance
      */
     @Bean
@@ -83,26 +135,20 @@ public class SecurityConfig {
 
     /**
      * Retrieves the list of allowed origins for CORS.
-     *
      * @return a list of allowed origins
      */
     private List<String> getAllowedOrigins() {
-        // Load allowed origins from configuration or environment variables
         return Collections.singletonList("http://localhost:3000");
     }
 
     /**
      * Defines a custom global filter for the API Gateway.
-     *
-     * This filter adds custom headers to requests and responses for tracking purposes.
-     *
      * @return the {@link GlobalFilter} instance
      */
     @Bean
     public GlobalFilter customGlobalFilter() {
         return (exchange, chain) -> {
             logger.info("Processing request: {}", exchange.getRequest().getURI());
-
             exchange.getRequest().mutate().header("X-Gateway-Timestamp", String.valueOf(System.currentTimeMillis())).build();
             return chain.filter(exchange).then(Mono.fromRunnable(() -> {
                 exchange.getResponse().getHeaders().add("X-Gateway-Processed", "true");

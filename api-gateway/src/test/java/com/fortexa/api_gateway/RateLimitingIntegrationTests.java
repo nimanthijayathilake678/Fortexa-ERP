@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 // @AutoConfigureWebTestClient // Already included with SpringBootTest for WebTestClient
 public class RateLimitingIntegrationTests {
 
-    private static final Logger logger = LoggerFactory.getLogger(RateLimitingIntegrationTests.java);
+    private static final Logger logger = LoggerFactory.getLogger(RateLimitingIntegrationTests.class);
 
     @Autowired
     private WebTestClient webTestClient;

@@ -11,13 +11,13 @@ public class StartupConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(StartupConfig.class);
 
-    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri:}") // Default to empty string if not set
+    @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri:}")
     private String keycloakIssuerUri;
 
-    @Value("${spring.data.redis.host:localhost}") // Default to localhost if not set
+    @Value("${spring.data.redis.host:localhost}")
     private String redisHost;
 
-    @Value("${spring.data.redis.port:6379}") // Default to 6379 if not set
+    @Value("${spring.data.redis.port:6379}")
     private String redisPort;
 
     @PostConstruct

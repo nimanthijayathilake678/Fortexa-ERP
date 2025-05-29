@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.ReactiveJwtDecoder;
 import org.springframework.test.context.ActiveProfiles;
@@ -35,7 +36,7 @@ import static org.springframework.security.test.web.reactive.server.SecurityMock
 @ActiveProfiles("test") // Ensure test profile is active if needed for specific configurations
 public class KeycloakAuthorizationIntegrationTests {
 
-    private static final Logger logger = LoggerFactory.getLogger(KeycloakAuthorizationIntegrationTests.java);
+    private static final Logger logger = LoggerFactory.getLogger(KeycloakAuthorizationIntegrationTests.class);
 
     @Autowired
     private WebTestClient webTestClient;
