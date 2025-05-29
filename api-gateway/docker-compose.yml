@@ -8,8 +8,9 @@ services:
       - "8080:8080"
     env_file: .env # Loads variables from .env file first
     environment:
+      # KEYCLOAK_REALM_NAME will be picked up from .env
       # Override .env variables for Docker Compose internal networking
-      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/your-realm 
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/realms/${KEYCLOAK_REALM_NAME}
       REDIS_HOST: redis
       # REDIS_PORT will be taken from .env or default to 6379, which is fine
     depends_on:
@@ -19,19 +20,23 @@ services:
         condition: service_healthy  # Wait for redis to be healthy
     networks:
       - fortexa-net
-    # Docker Compose will use the healthcheck from the Dockerfile if service_healthy is used.
-    # Alternatively, you can define a specific healthcheck here too.
 
   keycloak:
     image: quay.io/keycloak/keycloak:24.0
     ports:
       - "8180:8080" # Keycloak admin console on host port 8180
     environment:
+      # WARNING: Default Keycloak admin credentials.
+      # These should be changed for any production or sensitive environments.
       KEYCLOAK_ADMIN: admin
       KEYCLOAK_ADMIN_PASSWORD: admin
       KC_HEALTH_ENABLED: true
       KC_METRICS_ENABLED: true
-    command: start-dev 
+      # Note: Keycloak will create/use its own realms.
+      # The KEYCLOAK_REALM_NAME from .env is for the Spring app to know which realm to target.
+      # You'll need to ensure a realm named 'fortexa-realm' (or your chosen name)
+      # is created within Keycloak admin console after it starts.
+    command: start-dev
     networks:
       - fortexa-net
     healthcheck:
@@ -39,7 +44,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-      start_period: 30s # Give Keycloak time to start up
+      start_period: 30s
 
   redis:
     image: redis:7-alpine
