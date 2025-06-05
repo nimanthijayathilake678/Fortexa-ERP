@@ -1,0 +1,84 @@
+services:
+
+  keycloak-db:
+    image: postgres:17
+    container_name: keycloak-db
+    env_file: .env
+    environment:
+      POSTGRES_DB: ${KEYCLOAK_DB_USER}
+      POSTGRES_USER: ${KEYCLOAK_DB_USER}
+      POSTGRES_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    volumes:
+      - keycloak-db-data:/var/lib/postgresql/data
+    networks:
+      - ${INTERNAL_NET}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "${KEYCLOAK_DB_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.2
+    container_name: keycloak
+    env_file: .env
+    depends_on:
+      keycloak-db:
+        condition: service_healthy
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
+      KC_DB: ${KEYCLOAK_DB_VENDOR}
+      KC_DB_URL: ${KEYCLOAK_DB_URL}
+      KC_DB_USERNAME: ${KEYCLOAK_DB_USER}
+      KC_DB_PASSWORD: ${KEYCLOAK_DB_PASSWORD}
+    volumes:
+      - ./keycloak/realm-config:/opt/keycloak/data/import
+    ports:
+      - 8080:8080
+    networks:
+      - ${INTERNAL_NET}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  redis:
+    image: redis:8.0.1
+    container_name: redis
+    ports:
+      - "${REDIS_PORT}:6379"
+    networks:
+      - ${INTERNAL_NET}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  rabbitmq:
+    image: rabbitmq:4.1.0-management
+    container_name: rabbitmq
+    env_file: .env
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+    ports:
+      - 5672:5672      # AMQP
+      - 15672:15672    # HTTP UI
+    networks:
+      - ${INTERNAL_NET}
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  keycloak-db-data:
+
+networks:
+  fortexa-net:
+    driver: bridge
