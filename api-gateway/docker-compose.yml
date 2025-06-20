@@ -21,43 +21,6 @@ services:
     networks:
       - fortexa-net
 
-  keycloak:
-    image: quay.io/keycloak/keycloak:24.0
-    ports:
-      - "8180:8080" # Keycloak admin console on host port 8180
-    environment:
-      # WARNING: Default Keycloak admin credentials.
-      # These should be changed for any production or sensitive environments.
-      KEYCLOAK_ADMIN: admin
-      KEYCLOAK_ADMIN_PASSWORD: admin
-      KC_HEALTH_ENABLED: true
-      KC_METRICS_ENABLED: true
-      # Note: Keycloak will create/use its own realms.
-      # The KEYCLOAK_REALM_NAME from .env is for the Spring app to know which realm to target.
-      # You'll need to ensure a realm named 'fortexa-realm' (or your chosen name)
-      # is created within Keycloak admin console after it starts.
-    command: start-dev
-    networks:
-      - fortexa-net
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-      start_period: 30s
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    networks:
-      - fortexa-net
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
 networks:
   fortexa-net:
     driver: bridge
