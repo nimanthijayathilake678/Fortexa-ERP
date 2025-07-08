@@ -30,8 +30,7 @@ public class IUserServiceImpl implements IUserService{
     public UserResponseDTO AddNewUser(UserRequestDTO userRequestDTO){
         User entity=userServiceMapper.toEntity(userRequestDTO);
         User saved =iUserRepository.save(entity);
-        //return userServiceMapper
-        return null;
+        return userServiceMapper.ToDto(saved);
     }
 
 }

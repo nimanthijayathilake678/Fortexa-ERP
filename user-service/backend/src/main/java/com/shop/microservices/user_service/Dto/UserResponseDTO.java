@@ -2,6 +2,7 @@ package com.shop.microservices.user_service.Dto;
 
 import com.shop.microservices.user_service.Enumeration.UserStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
  * Data Transfer Object (DTO) for responding with User information.
  * This DTO contains the necessary information for a User response, such as username, email, mobile number, status, and two-factor authentication.
  */
+@Builder
 @Schema(description = "Response DTO for User information.")
 public record UserResponseDTO(
         @Schema(description = "The unique identifier of the user", example = "123e4567-e89b-12d3-a456-426614174000")
