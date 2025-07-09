@@ -13,15 +13,16 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
+//roll back when the transaction is not successful
 
-public class IUserServiceImpl implements IUserService{
+public class UserServiceImpl implements IUserService{
 
     @Autowired
     private final UserServiceMapper userServiceMapper;
     private final IUserRepository iUserRepository;
 
 
-    public IUserServiceImpl(UserServiceMapper userServiceMapper, IUserRepository iUserRepository){
+    public UserServiceImpl(UserServiceMapper userServiceMapper, IUserRepository iUserRepository){
         this.userServiceMapper=userServiceMapper;
         this.iUserRepository = iUserRepository;
     }
