@@ -8,6 +8,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class UserServiceMapper {
@@ -41,5 +43,16 @@ public class UserServiceMapper {
                  .lastModifiedBy(String.valueOf(user.getLastModifiedDate()))
                  .createdBy(user.getCreatedBy())
                  .lastModifiedBy(user.getLastModifiedBy()).build();
+    }
+
+    //map all the users to the DTO
+
+    public List<UserResponseDTO> GetAllUser(List<User> users) {
+        if (users == null) {
+            return null;
+        }
+        return users.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 }
