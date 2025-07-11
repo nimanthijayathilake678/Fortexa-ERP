@@ -5,7 +5,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.Immutable;
 
@@ -14,7 +13,7 @@ import org.hibernate.annotations.Immutable;
 @Builder
 @Setter
 
-public final class userPermission {
+public final class UserPermission {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
@@ -22,7 +21,7 @@ public final class userPermission {
     private final String permission_id;
     private final String permission;
 
-    public userPermission(String username,String permission_id,String permission){
+    public UserPermission(String username, String permission_id, String permission){
         this.permission_id=permission_id;
         this.username=username;
         this.permission=permission;
