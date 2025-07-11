@@ -10,16 +10,13 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 @Service
 @Transactional
-
 public class IUserServiceImpl implements IUserService{
 
     @Autowired
     private final UserServiceMapper userServiceMapper;
     private final IUserRepository iUserRepository;
-
 
     public IUserServiceImpl(UserServiceMapper userServiceMapper, IUserRepository iUserRepository){
         this.userServiceMapper=userServiceMapper;
@@ -30,7 +27,7 @@ public class IUserServiceImpl implements IUserService{
     public UserResponseDTO AddNewUser(UserRequestDTO userRequestDTO){
         User entity=userServiceMapper.toEntity(userRequestDTO);
         User saved =iUserRepository.save(entity);
-        return userServiceMapper.ToDto(saved);
+        return userServiceMapper.toDto(saved);
     }
 
 }

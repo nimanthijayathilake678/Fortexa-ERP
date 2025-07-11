@@ -17,8 +17,7 @@ public class UserServiceMapper {
         if(userRequestDTO ==null){
             return null;
         }
-        return
-                User.builder()
+        return User.builder()
                 .username(userRequestDTO.getUsername())
                 .password(userRequestDTO.getPassword())
                 .email(userRequestDTO.getEmail())
@@ -29,7 +28,7 @@ public class UserServiceMapper {
     }
 
     //Map the User to the UserResponseDTO
-    public UserResponseDTO ToDto(User user){
+    public UserResponseDTO toDto(User user){
         if(user ==null){
             return null;
         }
