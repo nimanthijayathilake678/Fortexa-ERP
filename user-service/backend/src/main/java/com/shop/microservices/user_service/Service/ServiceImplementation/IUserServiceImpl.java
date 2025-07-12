@@ -2,6 +2,7 @@ package com.shop.microservices.user_service.Service.ServiceImplementation;
 
 import com.shop.microservices.user_service.Dto.UserRequestDTO;
 import com.shop.microservices.user_service.Dto.UserResponseDTO;
+import com.shop.microservices.user_service.Enumeration.UserStatusEnum;
 import com.shop.microservices.user_service.Model.User;
 import com.shop.microservices.user_service.Repository.IUserRepository;
 import com.shop.microservices.user_service.Service.ServiceMapper.UserServiceMapper;
@@ -25,6 +26,7 @@ public class IUserServiceImpl implements IUserService{
         this.iUserRepository = iUserRepository;
     }
 
+    //Add a new user to the system
     @Override
     public UserResponseDTO AddNewUser(UserRequestDTO userRequestDTO){
         User entity=userServiceMapper.toEntity(userRequestDTO);
@@ -32,10 +34,33 @@ public class IUserServiceImpl implements IUserService{
         return userServiceMapper.toDto(saved);
     }
 
+    //Get All Users from the system
     @Override
     public List<UserResponseDTO> GetAllUser(){
         List<User> userResponse=iUserRepository.findAll();
         return userServiceMapper.GetAllUser(userResponse);
+    }
+
+    //Get User by Id from the system
+    @Override
+    public  UserResponseDTO GetUserById(String id){
+        User user = iUserRepository.findById(id).orElse(null);
+        if (user != null) {
+            return userServiceMapper.toDto(user);
+        }
+        return null;
+    }
+
+    //Set User Status Inactive
+    @Override
+    public boolean SetUserStatusInactive(String id){
+        User user = iUserRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setStatus(UserStatusEnum.INACTIVE);
+            iUserRepository.save(user);
+            return true;
+        }
+        return false;
     }
 }
 
