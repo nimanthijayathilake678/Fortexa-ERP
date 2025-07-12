@@ -5,6 +5,7 @@ import com.shop.microservices.user_service.Dto.UserResponseDTO;
 import com.shop.microservices.user_service.Enumeration.UserStatusEnum;
 import com.shop.microservices.user_service.Model.User;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -46,7 +47,6 @@ public class UserServiceMapper {
     }
 
     //map all the users to the DTO
-
     public List<UserResponseDTO> GetAllUser(List<User> users) {
         if (users == null) {
             return null;
