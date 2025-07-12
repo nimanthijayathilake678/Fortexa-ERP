@@ -75,5 +75,8 @@ public class IUserServiceImpl implements IUserService{
         }
         return null;
     }
+
+    //get the Permission type based on the user id
+
 }
 
