@@ -62,5 +62,18 @@ public class IUserServiceImpl implements IUserService{
         }
         return false;
     }
+
+    //Update user details (Only email and mobile number)
+    @Override
+    public UserResponseDTO UpdateUserDetails(String id, UserRequestDTO userRequestDTO){
+        User user = iUserRepository.findById(id).orElse(null);
+        if (user != null) {
+            user.setEmail(userRequestDTO.getEmail());
+            user.setMobileNo(userRequestDTO.getMobileNo());
+            User updatedUser = iUserRepository.save(user);
+            return userServiceMapper.toDto(updatedUser);
+        }
+        return null;
+    }
 }
 

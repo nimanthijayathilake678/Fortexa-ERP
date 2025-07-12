@@ -18,4 +18,7 @@ public interface IUserService {
 
     //Set user status inactive
     boolean SetUserStatusInactive(String id);
+
+    //Update user details
+    UserResponseDTO UpdateUserDetails(String id, UserRequestDTO userRequestDTO);
 }
